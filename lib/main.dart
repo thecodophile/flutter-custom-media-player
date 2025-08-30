@@ -192,6 +192,17 @@ class _DummyVideoPlayerScreenState extends State<DummyVideoPlayerScreen> {
     });
   }
 
+  void _toggleBrightnessUi() async {
+    setState(() {
+      _showBrightnessUI = !_showBrightnessUI;
+    });
+  }
+
+  void _toggleVolumeUi() async {
+    setState(() {
+      _showVolumeUI = !_showVolumeUI;
+    });
+  }
 
   @override
   void initState() {
@@ -385,6 +396,17 @@ class _DummyVideoPlayerScreenState extends State<DummyVideoPlayerScreen> {
                           }
                         },
 
+                        onVerticalDragEnd: (details){
+                          final screenWidth = MediaQuery.of(context).size.width;
+                          final dx = details.globalPosition.dx;
+
+                          if (dx < screenWidth / 2) {
+                            _toggleBrightnessUi();
+                          } else {
+                            _toggleVolumeUi();
+                          }
+                        },
+
                         child: Row(
                           children: [
                             // LEFT SIDE (Rewind)
@@ -445,9 +467,9 @@ class _DummyVideoPlayerScreenState extends State<DummyVideoPlayerScreen> {
                         ),
                       ),
 
-                    if (_showControls && _showVolumeUI)
+                    if (_showVolumeUI)
                       _VolumeOverlay(volume: _currentVolume),
-                    if (_showControls && _showBrightnessUI)
+                    if (_showBrightnessUI)
                       _BrightnessOverlay(brightness: _currentBrightness),
 
                     // Center play/pause
